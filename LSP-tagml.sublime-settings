@@ -1,0 +1,17 @@
+{
+  "languages": [
+    {
+      "languageId": "tagml",
+      "scopes": [
+        "text.tagml"
+      ],
+      "syntaxes": [
+        "Packages/TAGML/TAGML.sublime-syntax"
+      ]
+    }
+  ],
+  "env": {
+  },
+  "settings": {
+  }
+}
