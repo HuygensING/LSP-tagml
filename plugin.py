@@ -60,6 +60,7 @@ class LspTAGMLServer(object):
                 label="Downloading TAGML language server binary",
         ):
             urllib.request.urlretrieve(url=cls.url, filename=cls.binary)
+            sublime.status_message("jar file downloaded")
             cls.ready = cls.check_binary()
             if not cls.ready:
                 try:
@@ -70,6 +71,8 @@ class LspTAGMLServer(object):
         if not cls.ready:
             sublime.error_message("Error downloading TAGML server binary!")
 
+        sublime.message_dialog(
+            'The tagml-language-server has been installed, a restart of Sublime Text 3 is required to activate it.')
         cls.thread = None
 
     @classmethod
@@ -88,6 +91,7 @@ class LspTAGMLServer(object):
         # built local server binary path
         dest_path = package_cache()
         cls.binary = os.path.join(dest_path, os.path.basename(cls.url))
+        # raise Exception(cls.version + ":" + cls.url + " -> " + cls.binary)
 
         # download server binary on demand
         cls.ready = cls.check_binary()
@@ -136,7 +140,7 @@ class LspTAGMLPlugin(LanguageHandler):
 
     def on_start(self, window) -> bool:
         if not is_java_installed():
-            sublime.status_message(
+            sublime.message_dialog(
                 "Please install Java Runtime for the TAGML language server to work."
             )
             return False
