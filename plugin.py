@@ -26,6 +26,16 @@ def is_java_installed() -> bool:
     return shutil.which("java") is not None
 
 
+def is_lsp_installed() -> bool:
+    cache_path = os.path.join(sublime.cache_path(), "LSP")
+    return os.path.isdir(cache_path)
+
+
+def is_tagml_installed() -> bool:
+    cache_path = os.path.join(sublime.cache_path(), "TAGML")
+    return os.path.isdir(cache_path)
+
+
 def package_cache() -> str:
     cache_path = os.path.join(sublime.cache_path(), __package__)
     os.makedirs(cache_path, exist_ok=True)
@@ -91,7 +101,6 @@ class LspTAGMLServer(object):
         # built local server binary path
         dest_path = package_cache()
         cls.binary = os.path.join(dest_path, os.path.basename(cls.url))
-        # raise Exception(cls.version + ":" + cls.url + " -> " + cls.binary)
 
         # download server binary on demand
         cls.ready = cls.check_binary()
@@ -139,10 +148,16 @@ class LspTAGMLPlugin(LanguageHandler):
         return read_client_config(self.name, default_configuration)
 
     def on_start(self, window) -> bool:
+        missing_dependencies = []
+        if not is_lsp_installed():
+            missing_dependencies.append("Please install the LSP Package.")
+        if not is_tagml_installed():
+            missing_dependencies.append("Please install the TAGML Package.")
         if not is_java_installed():
-            sublime.message_dialog(
-                "Please install Java Runtime for the TAGML language server to work."
-            )
+            missing_dependencies.append("Please install Java Runtime for the TAGML language server to work.")
+        if missing_dependencies:
+            missing_dependencies.insert(0, "Some dependencies were missing:")
+            sublime.message_dialog("\n  ".join(missing_dependencies))
             return False
         if not LspTAGMLServer.ready:
             sublime.status_message("Language server binary not yet downloaded.")
