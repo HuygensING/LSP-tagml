@@ -1,5 +1,5 @@
 {
   "version": "0.1",
-  "url": "https://cdn.huygens.knaw.nl/alexandria/tagml-language-server-${version}.jar",
-  "sha256": "613feee8d0bb6db3dc83742daff7559f390ae2e773b0d1701bf0db293d1ccb16"
+  "url": "http://cdn.huygens.knaw.nl/alexandria/tagml-language-server-${version}.jar",
+  "sha256": "05538464a6e0e169c3e273676d265038f97527aa0e2a4ea8200a7a3a3a9c1c86"
 }
