@@ -10,7 +10,7 @@ from LSP.plugin.core.handlers import LanguageHandler
 from LSP.plugin.core.settings import ClientConfig, read_client_config
 from sublime_lib import ActivityIndicator
 
-PACKAGE_NAME = 'LSP-tagml'
+__package__ = 'LSP-tagml'
 SETTINGS_FILENAME = 'LSP-tagml.sublime-settings'
 
 
