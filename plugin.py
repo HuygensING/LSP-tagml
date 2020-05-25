@@ -10,8 +10,6 @@ from LSP.plugin.core.handlers import LanguageHandler
 from LSP.plugin.core.settings import ClientConfig, read_client_config
 from sublime_lib import ActivityIndicator
 
-# PACKAGE_NAME = 'LSP-tagml'
-PACKAGE_NAME = __package__
 SETTINGS_FILENAME = 'LSP-tagml.sublime-settings'
 
 
@@ -153,3 +151,18 @@ class LspTAGMLPlugin(LanguageHandler):
                 default_configuration[key] = loaded_settings.get(key)
 
         return read_client_config(self.name, default_configuration)
+
+    def on_start(self, window) -> bool:
+        missing_dependencies = []
+        if not is_tagml_installed():
+            missing_dependencies.append("Please install the TAGML Package.")
+        if not is_java_installed():
+            missing_dependencies.append("Please install Java Runtime for the TAGML language server to work.")
+        if missing_dependencies:
+            missing_dependencies.insert(0, "Some dependencies were missing:")
+            sublime.message_dialog("\n  ".join(missing_dependencies))
+            return False
+        if not LspTAGMLServer.ready:
+            sublime.status_message("Language server binary not yet downloaded.")
+            return False
+        return True
